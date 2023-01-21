@@ -1,0 +1,27 @@
+﻿@model Product
+
+<h2 style="text-align:center;">Product Detalis</h2>
+@{
+    ViewData["Title"] = Model.ProductName;
+}
+<div class="row"> 
+        <div class="col-12">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <div>
+                                <h5 class="card-title">@Model.ProductName</h5>
+                                <p class="card-text text-justify">@Model.QuantityPerUnit</p>
+                                <p class="card-text text-justify">@Model.ReorderLevel</p>
+                                <p class="card-text text-justify">@Model.UnitsInStock</p>
+                                <p class="card-text text-justify">@Model.UnitsOnOrder</p>
+                                <p class="card-text"><small class="text-muted">@Model.UnitPrice</small></p>
+        <span class="text-muted">@Model.Supplier.SupplierName</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

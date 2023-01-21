@@ -1,0 +1,96 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "Products";
+}
+<h2>All Products</h2>
+<hr />
+<a class="btn btn-primary" asp-action="Create">Add Product</a>
+
+<div class="mt-4">
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning" role="alert">
+            There Is No Product!
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-12">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <div>
+                                        <h5 class="card-title">@product.ProductName</h5>
+                                        <p class="card-text text-justify">@product.QuantityPerUnit</p>
+                                        <p class="card-text text-justify">@product.ReorderLevel</p>
+                                        <p class="card-text text-justify">@product.UnitsInStock</p>
+                                        <p class="card-text text-justify">@product.UnitsOnOrder</p>
+                                        <p class="card-text"><small class="text-muted">@product.UnitPrice</small></p>
+                                    </div>
+                                    <div>
+                                        <a asp-action="Details" asp-route-id="@product.ProductID" class="btn btn-primary">Details</a>
+                                        <a asp-action="Edit" asp-route-id="@product.ProductID" class="btn btn-warning">Edit</a>
+                                        <a href="javascript:;" class="btn btn-danger js-delete" data-id="@product.ProductID">
+                                            Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    }
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.js-delete').on('click', function () {
+                var btn = $(this);
+
+                bootbox.confirm({
+                    message: "Are you sure that you need to delete this product?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-outline-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: '/products/delete/' + btn.data('id'),
+                                success: function () {
+                                    var movieContainer = btn.parents('.col-12');
+                                    movieContainer.addClass('animate__animated animate__zoomOut');
+
+                                    setTimeout(function () {
+                                        movieContainer.remove();
+                                    }, 1000);
+
+                                    toastr.success('product deleted');
+                                },
+                                error: function () {
+                                    toastr.error('Something went wrong!');
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
